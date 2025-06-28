@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Elegant Muse Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: linear-gradient(to bottom, #e0e0e0, #ffffff);
+      --accent: #6d4c41;
+      --text: #3e3e3e;
+      --hover: #a1887f;
+      --caption-bg: #f0f0f0;
+      --header-bg: #d7ccc8;
+      --border: #a1887f;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      transition: background 0.6s ease, color 0.6s ease;
+    }
+
+    header {
+      background: var(--header-bg);
+      padding: 30px 20px;
+      text-align: center;
+      border-bottom: 4px solid var(--accent);
+    }
+
+    header h1 {
+      font-size: 2.8em;
+      font-family: 'Pacifico', cursive;
+      color: var(--text);
+    }
+
+    nav {
+      margin-top: 15px;
+    }
+
+    nav a {
+      margin: 0 15px;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    nav a:hover {
+      color: var(--hover);
+    }
+
+    .intro {
+      max-width: 800px;
+      margin: 30px auto;
+      text-align: center;
+      padding: 0 20px;
+      font-size: 1.1em;
+    }
+
+    .theme-buttons {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    .theme-buttons button {
+      margin: 5px 8px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1em;
+      cursor: pointer;
+      background: var(--accent);
+      color: white;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    .theme-buttons button:hover {
+      background: var(--hover);
+      transform: translateY(-2px);
+    }
+
+    .hero {
+      text-align: center;
+      margin: 40px 20px;
+    }
+
+    .hero img {
+      width: 280px;
+      border-radius: 20px;
+      border: 6px solid var(--hover);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      animation: float 4s ease-in-out infinite, zoomIn 0.8s ease-in-out;
+      cursor: pointer;
+      transition: transform 0.4s ease;
+    }
+
+    .hero img:hover {
+      transform: scale(1.02);
+    }
+
+    .hero .quote {
+      margin-top: 20px;
+      font-size: 1.4em;
+      font-style: italic;
+      font-family: 'Georgia', serif;
+      color: #5c4033;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 25px;
+      padding: 20px;
+    }
+
+    .photo {
+      background: #fffaf5;
+      border: 4px solid var(--border);
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      animation: fadeInUp 0.6s ease-in-out;
+      transition: transform 0.3s ease;
+    }
+
+    .photo:hover {
+      transform: scale(1.05);
+    }
+
+    .photo img {
+      width: 100%;
+      border-radius: 11px 11px 0 0;
+      cursor: pointer;
+    }
+
+    .caption {
+      padding: 10px;
+      font-size: 1em;
+      background: var(--caption-bg);
+      border-radius: 0 0 11px 11px;
+      text-align: center;
+    }
+
+    .about {
+      max-width: 700px;
+      margin: 50px auto;
+      background: #f5f5f5;
+      padding: 25px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px var(--border);
+    }
+
+    .about h2 {
+      color: var(--text);
+    }
+
+    .about ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .about ul li {
+      margin: 10px 0;
+      padding-left: 1em;
+      position: relative;
+    }
+
+    .about ul li::before {
+      content: "\2728";
+      position: absolute;
+      left: 0;
+      color: var(--accent);
+    }
+
+    footer {
+      text-align: center;
+      padding: 25px;
+      background: #d7ccc8;
+      color: var(--text);
+      border-top: 2px solid var(--border);
+      font-size: 0.9em;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity:0; transform:translateY(20px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+
+    @keyframes zoomIn {
+      from { transform:scale(0.9); opacity:0; }
+      to { transform:scale(1); opacity:1; }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+      100% { transform: translateY(0); }
+    }
+
+    #lightbox-overlay {
+      position: fixed;
+      top:0; left:0;
+      width:100%; height:100%;
+      background: rgba(30,30,30,0.9);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index:9999;
+      animation: fadeInUp 0.3s ease;
+      flex-direction: column;
+    }
+
+    #lightbox-overlay img {
+      max-width:90%;
+      max-height:85%;
+      border-radius:12px;
+      box-shadow:0 0 40px rgba(0,0,0,0.5);
+      animation: zoomIn 0.4s ease;
+      pointer-events:auto;
+      transition: transform 0.4s ease;
+    }
+
+    #lightbox-overlay img:hover {
+      transform: scale(1.02);
+    }
+
+    #lightbox-caption {
+      color:white;
+      margin-top:20px;
+      font-size:1.2em;
+      text-align:center;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2.5em;
+      color: white;
+      cursor: pointer;
+      z-index:10000;
+    }
+
+    .nav-btn {
+      position: absolute;
+      top:50%;
+      transform: translateY(-50%);
+      font-size:3em;
+      color:white;
+      cursor:pointer;
+      user-select:none;
+      z-index:10000;
+      padding:10px;
+    }
+
+    .left-btn { left:30px; }
+    .right-btn { right:30px; }
+    .nav-btn:hover, .close-btn:hover {
+      color: #fbc02d;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Elegant Muse: Rainy Day Glow</h1>
+    <nav>
+      <a href="#gallery">Gallery</a>
+      <a href="#about">About</a>
+    </nav>
+  </header>
+
+  <section class="intro">
+    <p>A heartfelt visual ode to beauty in stillness — captured in soft rain light, warm coffee hues, and a touch of timeless elegance.</p>
+  </section>
+
+  <section class="hero">
+    <img id="hero-img" src="pic26.png" alt="Portrait of elegance and charm"/>
+    <div class="quote">"A smile that lingers in memory, and eyes that speak poetry."</div>
+  </section>
+
+  <section id="gallery" class="gallery">
+  <div class="photo"><img src="pic1.png" alt="Pic 1" /><div class="caption">That smile 🫠</div></div>
+  <div class="photo"><img src="pic2.png" alt="Pic 2" /><div class="caption">Wholesome energy!</div></div>
+  <div class="photo"><img src="pic3.png" alt="Pic 3" /><div class="caption">Heart = stolen 💘</div></div>
+  <div class="photo"><img src="pic4.png" alt="Pic 4" /><div class="caption">Glowing in every light ✨</div></div>
+  <div class="photo"><img src="pic5.png" alt="Pic 5" /><div class="caption">Joy in pixels 📸</div></div>
+  <div class="photo"><img src="pic6.png" alt="Pic 6" /><div class="caption">Cuteness overload 💫</div></div>
+  <div class="photo"><img src="pic7.png" alt="Pic 7" /><div class="caption">So aesthetic 🌸</div></div>
+  <div class="photo"><img src="pic8.png" alt="Pic 8" /><div class="caption">Sunshine smile ☀️</div></div>
+  <div class="photo"><img src="pic9.png" alt="Pic 9" /><div class="caption">Pure charm 💕</div></div>
+  <div class="photo"><img src="pic10.png" alt="Pic 10" /><div class="caption">My fav look 💖</div></div>
+  <div class="photo"><img src="pic11.png" alt="Pic 11" /><div class="caption">Sparkling eyes ✨</div></div>
+  <div class="photo"><img src="pic12.png" alt="Pic 12" /><div class="caption">Goddess mode 😍</div></div>
+  <div class="photo"><img src="pic13.png" alt="Pic 13" /><div class="caption">Dreamy vibes 🌙</div></div>
+  <div class="photo"><img src="pic14.png" alt="Pic 14" /><div class="caption">Pretty in park 💗</div></div>
+  <div class="photo"><img src="pic15.png" alt="Pic 15" /><div class="caption">Cutest outfit ever 🐾</div></div>
+  <div class="photo"><img src="pic16.png" alt="Pic 16" /><div class="caption">Golden hour glow ✨</div></div>
+  <div class="photo"><img src="pic17.png" alt="Pic 17" /><div class="caption">Look at that smile 💫</div></div>
+  <div class="photo"><img src="pic18.png" alt="Pic 18" /><div class="caption">The cutest tilt 🥹</div></div>
+  <div class="photo"><img src="pic19.png" alt="Pic 19" /><div class="caption">Bookish & beautiful 📚</div></div>
+  <div class="photo"><img src="pic20.png" alt="Pic 20" /><div class="caption">Always radiant 💡</div></div>
+  <div class="photo"><img src="pic21.png" alt="Pic 21" /><div class="caption">Soft cheeks and sunshine ☁️</div></div>
+  <div class="photo"><img src="pic22.png" alt="Pic 22" /><div class="caption">Eyes that melt hearts 🥰</div></div>
+  <div class="photo"><img src="pic23.png" alt="Pic 23" /><div class="caption">Unfiltered beauty 🌿</div></div>
+  <div class="photo"><img src="pic24.png" alt="Pic 24" /><div class="caption">Café vibes and cuteness ☕</div></div>
+  <div class="photo"><img src="pic25.png" alt="Pic 25" /><div class="caption">Elegance in pixels ✨</div></div>
+  <div class="photo"><img src="pic27.png" alt="Pic 27" /><div class="caption">Dreamscape moments ✨</div></div>
+  <div class="photo"><img src="pic28.png" alt="Pic 28" /><div class="caption">Serenity in a snapshot 🌸</div></div>
+  <div class="photo"><img src="pic29.png" alt="Pic 29" /><div class="caption">Velvet dusk vibes 🌙</div></div>
+  <div class="photo"><img src="pic30.png" alt="Pic 30" /><div class="caption">Golden memories 🧡</div></div>
+  <div class="photo"><img src="pic31.png" alt="Pic 31" /><div class="caption">Grace and glow ✨</div></div>
+  <div class="photo"><img src="pic32.png" alt="Pic 32" /><div class="caption">Simply stunning 💫</div></div>
+  <div class="photo"><img src="pic33.png" alt="Pic 33" /><div class="caption">Forever fave 💕</div></div>
+  <div class="photo"><img src="pic34.png" alt="Pic 34" /><div class="caption">Winter wonderland look ❄️</div></div>
+  <div class="photo"><img src="pic35.png" alt="Pic 35" /><div class="caption">Snowy day smiles ☃️</div></div>
+  <div class="photo"><img src="pic36.png" alt="Pic 36" /><div class="caption">Bliss in a frame 📷</div></div>
+  <div class="photo"><img src="pic37.png" alt="Pic 37" /><div class="caption">Eyes full of wonder ✨</div></div>
+  <div class="photo"><img src="pic38.png" alt="Pic 38" /><div class="caption">Gentle grace 💮</div></div>
+  <div class="photo"><img src="pic39.png" alt="Pic 39" /><div class="caption">Captured magic 🪄</div></div>
+  <div class="photo"><img src="pic40.png" alt="Pic 40" /><div class="caption">Frozen fairytale ❄️</div></div>
+  <div class="photo"><img src="pic41.png" alt="Pic 41" /><div class="caption">Wanderlust eyes 🌍</div></div>
+  <div class="photo"><img src="pic42.png" alt="Pic 42" /><div class="caption">Moments of gold 🌅</div></div>
+  <div class="photo"><img src="pic43.png" alt="Pic 43" /><div class="caption">Cozy and charming 🧣</div></div>
+  <div class="photo"><img src="pic44.png" alt="Pic 44" /><div class="caption">Muse mode activated 🎨</div></div>
+  <div class="photo"><img src="pic45.png" alt="Pic 45" /><div class="caption">Snow-lit elegance 🌨️</div></div>
+  <div class="photo"><img src="pic46.png" alt="Pic 46" /><div class="caption">Glow in the frost ❄️</div></div>
+  <div class="photo"><img src="pic47.png" alt="Pic 47" /><div class="caption">Timeless gaze ⏳</div></div>
+  <div class="photo"><img src="pic48.png" alt="Pic 48" /><div class="caption">Flawlessly festive 🎀</div></div>
+  <div class="photo"><img src="pic49.png" alt="Pic 49" /><div class="caption">Winter magic moment 🧊</div></div>
+  <div class="photo"><img src="pic50.png" alt="Pic 50" /><div class="caption">Dream girl vibes 💭</div></div>
+</section>
+
+  <section id="about" class="about">
+    <h2>About Her ✨</h2>
+    <p>With kind eyes and a laugh that brightens moments, she embodies elegance and warmth.</p>
+    <ul>
+      <li>🤖 An AI-crafted vision of beauty</li>
+      <li>☕ Coffee enthusiast and calm mornings lover</li>
+      <li>🎨 Expresses with colors and brushes</li>
+      <li>🐶 Finds joy in every fluffy dog</li>
+    </ul>
+  </section>
+
+  <footer>
+    Made with warm thoughts and graceful pixels 🌿
+  </footer>
+
+  <!-- Lightbox and Theme Script -->
+  <div id="lightbox-overlay">
+    <span class="close-btn" onclick="closeLightbox()" aria-label="Close">&times;</span>
+    <span class="nav-btn left-btn" onclick="prevImage()" aria-label="Previous">&#8592;</span>
+    <img id="lightbox-img" src="" alt="Full View"/>
+    <span class="nav-btn right-btn" onclick="nextImage()" aria-label="Next">&#8594;</span>
+    <div id="lightbox-caption"></div>
+  </div>
+
+  <script>
+    let currentIndex = 0;
+    const images = Array.from(document.querySelectorAll('.photo img'));
+    const heroImg = document.getElementById('hero-img');
+    const allImages = [heroImg, ...images];
+    const lightbox = document.getElementById('lightbox-overlay');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const captionBox = document.getElementById('lightbox-caption');
+
+    heroImg.addEventListener('click', () => {
+      currentIndex = 0;
+      showImage();
+    });
+
+    images.forEach((img, index) => {
+      img.addEventListener('click', () => {
+        currentIndex = index + 1;
+        showImage();
+      });
+    });
+
+    function showImage() {
+      lightboxImg.src = allImages[currentIndex].src;
+      let captionText = currentIndex === 0 ? heroImg.alt : images[currentIndex - 1].nextElementSibling.textContent;
+      captionBox.textContent = captionText;
+      lightbox.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+    }
+
+    function prevImage() {
+      currentIndex = (currentIndex - 1 + allImages.length) % allImages.length;
+      showImage();
+    }
+
+    function nextImage() {
+      currentIndex = (currentIndex + 1) % allImages.length;
+      showImage();
+    }
+
+    document.addEventListener('keydown', e => {
+      if (lightbox.style.display === 'flex') {
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') prevImage();
+        if (e.key === 'ArrowRight') nextImage();
+      }
+    });
+
+    lightbox.addEventListener('click', e => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    function setTheme() {
+      const root = document.documentElement;
+      root.style.setProperty('--bg', 'linear-gradient(to bottom, #e0e0e0, #ffffff)');
+      root.style.setProperty('--accent', '#6d4c41');
+      root.style.setProperty('--hover', '#a1887f');
+      root.style.setProperty('--text', '#3e3e3e');
+      root.style.setProperty('--caption-bg', '#f0f0f0');
+      root.style.setProperty('--header-bg', '#d7ccc8');
+      root.style.setProperty('--border', '#a1887f');
+    }
+  </script>
+</body>
+</html>
+
+
+<!--
+
+A young woman with a softly defined oval face, warm light-to-medium skin tone, and a delicate, 
+natural glow. She has symmetrical facial features with softly arched eyebrows, large almond-shaped hazel eyes framed by 
+long lashes, and a subtle winged eyeliner look. Her nose is narrow and straight, and her lips are full with a gentle 
+smile and defined cupid’s bow. She has long, dark brown hair styled in soft, natural waves, with a center part and 
+light layering that frames her face. Her hairstyle is smooth and slightly voluminous, giving a soft romantic vibe 
+Maintain her exact face and hairstyle as described: long dark brown hair in soft waves with a center part, oval face, 
+hazel almond eyes, full lips with a soft smile woman posing confidently in a luxurious red satin dress, off-shoulder design, 
+soft waves in her hair, a gentle smile, seductive yet classy look.
+
+-->
