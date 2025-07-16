@@ -5,314 +5,367 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Elegant Muse Gallery</title>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="logo.png" />
+
   <style>
     :root {
-      --bg: linear-gradient(to bottom, #ffffff, #f5f5f5);
+      --bg: #ffffff;
       --accent: #ff69b4;
       --text: #333;
       --hover: #ff85c1;
       --caption-bg: #f0f0f0;
       --header-bg: #f8f8f8;
       --border: #ff69b4;
+      --sidebar-bg: #fff0f5;
     }
+
     body.dark-mode {
-      --bg: linear-gradient(to bottom, #121212, #1c1c1c);
+      --bg: #121212;
       --accent: #bb86fc;
       --text: #e0e0e0;
       --hover: #e3baff;
       --caption-bg: #2a2a2a;
       --header-bg: #1f1f1f;
       --border: #bb86fc;
+      --sidebar-bg: #1e1e1e;
     }
+
     body {
       margin: 0;
       font-family: 'Poppins', sans-serif;
       background: var(--bg);
       color: var(--text);
+      display: flex;
       transition: background 0.4s ease, color 0.4s ease;
     }
-    header {
-      background: var(--header-bg);
+
+    /* Sidebar */
+    .sidebar {
+      width: 160px;
+      background: var(--sidebar-bg);
       padding: 30px 20px;
-      text-align: center;
-      border-bottom: 4px solid var(--accent);
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.05);
+      height: 100vh;
+      position: fixed;
     }
-    header h1 {
-      font-size: 2.8em;
+
+    .sidebar h1 {
       font-family: 'Pacifico', cursive;
+      font-size: 1.8em;
+      margin-bottom: 20px;
+      text-align: center;
     }
-    nav {
-      margin-top: 15px;
-    }
-    nav a {
-      margin: 0 15px;
+
+    .sidebar nav a {
+      display: block;
+      margin: 15px 0;
       text-decoration: none;
       color: var(--text);
       font-weight: 600;
+      transition: color 0.3s;
     }
-    nav a:hover {
+
+    .sidebar nav a:hover {
       color: var(--hover);
     }
-    .intro {
-      max-width: 800px;
-      margin: 30px auto;
+
+    .sidebar .theme-buttons {
       text-align: center;
-      padding: 0 20px;
-      font-size: 1.1em;
+      margin-top: 30px;
     }
-    .theme-buttons {
-      text-align: center;
-      margin: 20px 0;
-    }
-    .theme-buttons button {
-      padding: 10px 20px;
+
+    .sidebar button {
+      padding: 10px 15px;
       border: none;
-      border-radius: 25px;
-      font-size: 1em;
+      border-radius: 20px;
+      font-size: 0.95em;
       cursor: pointer;
       background: var(--accent);
       color: white;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
       transition: background 0.3s ease;
     }
-    .theme-buttons button:hover {
+
+    .sidebar button:hover {
       background: var(--hover);
     }
+
+    /* Main content */
+    .main {
+      margin-left: 220px;
+      width: calc(100% - 220px);
+      padding: 20px;
+    }
+
+    .intro {
+      text-align: center;
+      font-size: 1.1em;
+      margin-bottom: 30px;
+    }
+
     .hero {
       text-align: center;
-      margin: 40px 20px;
+      margin-bottom: 40px;
     }
+
     .hero img {
-      width: 280px;
+      width: 300px;
       border-radius: 20px;
-      border: 6px solid var(--hover);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      cursor: pointer;
-      transition: transform 0.4s ease;
+      border: 5px solid var(--hover);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
-    .hero img:hover {
-      transform: scale(1.02);
-    }
+
     .hero .quote {
-      margin-top: 20px;
-      font-size: 1.4em;
-      font-style: italic;
-      font-family: 'Georgia', serif;
+      font-size: 1.3em;
       color: var(--hover);
+      margin-top: 15px;
+      font-style: italic;
     }
+
     .gallery {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 25px;
-      padding: 20px;
+      gap: 20px;
     }
+
     .photo {
       background: var(--header-bg);
       border: 4px solid var(--border);
       border-radius: 15px;
-      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-      transition: transform 0.3s ease;
+      overflow: hidden;
+      transition: transform 0.3s;
     }
+
     .photo:hover {
       transform: scale(1.05);
     }
+
     .photo img {
       width: 100%;
-      border-radius: 11px 11px 0 0;
-      cursor: pointer;
+      display: block;
     }
+
     .caption {
       padding: 10px;
-      font-size: 1em;
-      background: var(--caption-bg);
-      border-radius: 0 0 11px 11px;
       text-align: center;
+      background: var(--caption-bg);
+      font-size: 0.95em;
     }
+
     .about {
-      max-width: 700px;
       margin: 50px auto;
+      max-width: 800px;
       background: var(--header-bg);
       padding: 25px;
       border-radius: 15px;
-      box-shadow: 0 0 20px var(--border);
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
     }
-    .about h2 {
-      color: var(--text);
-    }
+
     .about ul {
       list-style: none;
-      padding: 0;
+      padding-left: 0;
     }
-    .about ul li {
-      margin: 10px 0;
-      padding-left: 1em;
-      position: relative;
-    }
-    .about ul li::before {
+
+    .about li::before {
       content: "✨";
-      position: absolute;
-      left: 0;
+      margin-right: 10px;
       color: var(--accent);
     }
+
     footer {
       text-align: center;
       padding: 25px;
       background: var(--header-bg);
-      color: var(--text);
+      margin-top: 50px;
       border-top: 2px solid var(--border);
-      font-size: 0.9em;
     }
-    /* Lightbox styles */
+
+    /* Lightbox */
     .lightbox {
       display: none;
       position: fixed;
       z-index: 999;
-      top: 0;
-      left: 0;
+      top: 0; left: 0;
       width: 100%;
       height: 100%;
       background: rgba(0,0,0,0.9);
-      align-items: center;
       justify-content: center;
+      align-items: center;
       flex-direction: column;
     }
+
     .lightbox.show {
       display: flex;
     }
+
     .lightbox img {
       max-width: 90%;
       max-height: 90%;
       border-radius: 8px;
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
     }
+
     .lightbox .close,
     .lightbox .prev,
     .lightbox .next {
       position: absolute;
-      color: #fff;
       font-size: 2em;
-      background: rgba(0,0,0,0.4);
+      color: white;
+      background: rgba(0, 0, 0, 0.4);
       border: none;
-      padding: 0.3em 0.6em;
+      padding: 0.5em;
       cursor: pointer;
       border-radius: 4px;
     }
-    .lightbox .close {
-      top: 20px;
-      right: 30px;
-    }
-    .lightbox .prev {
-      left: 30px;
-      top: 50%;
-      transform: translateY(-50%);
-    }
-    .lightbox .next {
-      right: 30px;
-      top: 50%;
-      transform: translateY(-50%);
+
+    .lightbox .close { top: 20px; right: 30px; }
+    .lightbox .prev { left: 30px; top: 50%; transform: translateY(-50%); }
+    .lightbox .next { right: 30px; top: 50%; transform: translateY(-50%); }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: relative;
+        width: 100%;
+        height: auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 20px;
+      }
+
+      .sidebar nav {
+        display: flex;
+        gap: 15px;
+      }
+
+      .main {
+        margin-left: 0;
+        width: 100%;
+      }
+
+      .sidebar h1 {
+        font-size: 1.2em;
+      }
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Elegant Muse Gallery</h1>
-    <nav>
-      <a href="#gallery">Gallery</a>
-      <a href="#about">About</a>
-    </nav>
-  </header>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div>
+      <h1>Muse Gallery</h1>
+      <nav>
+        <a href="#gallery">Gallery</a>
+        <a href="#about">About</a>
+      </nav>
+      <div class="theme-buttons">
+        <button onclick="toggleDarkMode()">Dark Mode</button>
+      </div>
+    </div>
+  </aside>
 
-  <section class="intro">
-    <p>A visual ode to beauty — bright days, soft smiles, and timeless elegance.</p>
-  </section>
+  <!-- Main content -->
+  <main class="main">
+    <section class="intro">
+      <p>A visual ode to beauty — bright days, soft smiles, and timeless elegance.</p>
+    </section>
 
-  <div class="theme-buttons">
-    <button onclick="toggleDarkMode()">Toggle Dark Mode</button>
-  </div>
+    <section class="hero">
+      <img src="pic26.png" alt="Portrait of elegance"/>
+      <div class="quote">"A smile that lingers in memory."</div>
+    </section>
 
-  <section class="hero">
-    <img src="pic26.png" alt="Portrait of elegance"/>
-    <div class="quote">"A smile that lingers in memory."</div>
-  </section>
+    <section id="gallery" class="gallery">
+     <div class="photo"><img src="pic1.png" alt="Pic 1"><div class="caption">That smile 🫠</div></div>
+    <div class="photo"><img src="pic2.png" alt="Pic 2"><div class="caption">Wholesome energy!</div></div>
+    <div class="photo"><img src="pic3.png" alt="Pic 3"><div class="caption">Heart = stolen 💘</div></div>
+    <div class="photo"><img src="pic4.png" alt="Pic 4"><div class="caption">Glowing in every light ✨</div></div>
+    <div class="photo"><img src="pic5.png" alt="Pic 5"><div class="caption">Joy in pixels 📸</div></div>
+    <div class="photo"><img src="pic6.png" alt="Pic 6"><div class="caption">Cuteness overload 💫</div></div>
+    <div class="photo"><img src="pic7.png" alt="Pic 7"><div class="caption">So aesthetic 🌸</div></div>
+    <div class="photo"><img src="pic8.png" alt="Pic 8"><div class="caption">Sunshine smile ☀️</div></div>
+    <div class="photo"><img src="pic9.png" alt="Pic 9"><div class="caption">Pure charm 💕</div></div>
+    <div class="photo"><img src="pic10.png" alt="Pic 10"><div class="caption">My fav look 💖</div></div>
+    <div class="photo"><img src="pic11.png" alt="Pic 11"><div class="caption">Sparkling eyes ✨</div></div>
+    <div class="photo"><img src="pic12.png" alt="Pic 12"><div class="caption">Goddess mode 😍</div></div>
+    <div class="photo"><img src="pic13.png" alt="Pic 13"><div class="caption">Dreamy vibes 🌙</div></div>
+    <div class="photo"><img src="pic14.png" alt="Pic 14"><div class="caption">Pretty in park 💗</div></div>
+    <div class="photo"><img src="pic15.png" alt="Pic 15"><div class="caption">Cutest outfit ever 🐾</div></div>
+    <div class="photo"><img src="pic16.png" alt="Pic 16"><div class="caption">Golden hour glow ✨</div></div>
+    <div class="photo"><img src="pic17.png" alt="Pic 17"><div class="caption">Look at that smile 💫</div></div>
+    <div class="photo"><img src="pic18.png" alt="Pic 18"><div class="caption">The cutest tilt 🥹</div></div>
+    <div class="photo"><img src="pic19.png" alt="Pic 19"><div class="caption">Bookish & beautiful 📚</div></div>
+    <div class="photo"><img src="pic20.png" alt="Pic 20"><div class="caption">Always radiant 💡</div></div>
+    <div class="photo"><img src="pic21.png" alt="Pic 21"><div class="caption">Soft cheeks and sunshine ☁️</div></div>
+    <div class="photo"><img src="pic22.png" alt="Pic 22"><div class="caption">Eyes that melt hearts 🥰</div></div>
+    <div class="photo"><img src="pic23.png" alt="Pic 23"><div class="caption">Unfiltered beauty 🌿</div></div>
+    <div class="photo"><img src="pic24.png" alt="Pic 24"><div class="caption">Café vibes and cuteness ☕</div></div>
+    <div class="photo"><img src="pic25.png" alt="Pic 25"><div class="caption">Elegance in pixels ✨</div></div>
+    <div class="photo"><img src="pic27.png" alt="Pic 27"><div class="caption">Dreamscape moments ✨</div></div>
+    <div class="photo"><img src="pic28.png" alt="Pic 28"><div class="caption">Serenity in a snapshot 🌸</div></div>
+    <div class="photo"><img src="pic29.png" alt="Pic 29"><div class="caption">Velvet dusk vibes 🌙</div></div>
+    <div class="photo"><img src="pic30.png" alt="Pic 30"><div class="caption">Golden memories 🧡</div></div>
+    <div class="photo"><img src="pic31.png" alt="Pic 31"><div class="caption">Grace and glow ✨</div></div>
+    <div class="photo"><img src="pic32.png" alt="Pic 32"><div class="caption">Simply stunning 💫</div></div>
+    <div class="photo"><img src="pic33.png" alt="Pic 33"><div class="caption">Forever fave 💕</div></div>
+    <div class="photo"><img src="pic34.png" alt="Pic 34"><div class="caption">Winter wonderland look ❄️</div></div>
+    <div class="photo"><img src="pic35.png" alt="Pic 35"><div class="caption">Snowy day smiles ☃️</div></div>
+    <div class="photo"><img src="pic36.png" alt="Pic 36"><div class="caption">Bliss in a frame 📷</div></div>
+    <div class="photo"><img src="pic37.png" alt="Pic 37"><div class="caption">Eyes full of wonder ✨</div></div>
+    <div class="photo"><img src="pic38.png" alt="Pic 38"><div class="caption">Gentle grace 💮</div></div>
+    <div class="photo"><img src="pic39.png" alt="Pic 39"><div class="caption">Captured magic 🪄</div></div>
+    <div class="photo"><img src="pic40.png" alt="Pic 40"><div class="caption">Frozen fairytale ❄️</div></div>
+    <div class="photo"><img src="pic41.png" alt="Pic 41"><div class="caption">Wanderlust eyes 🌍</div></div>
+    <div class="photo"><img src="pic42.png" alt="Pic 42"><div class="caption">Moments of gold 🌅</div></div>
+    <div class="photo"><img src="pic43.png" alt="Pic 43"><div class="caption">Cozy and charming 🧣</div></div>
+    <div class="photo"><img src="pic44.png" alt="Pic 44"><div class="caption">Muse mode activated 🎨</div></div>
+    <div class="photo"><img src="pic45.png" alt="Pic 45"><div class="caption">Snow-lit elegance 🌨️</div></div>
+    <div class="photo"><img src="pic46.png" alt="Pic 46"><div class="caption">Glow in the frost ❄️</div></div>
+    <div class="photo"><img src="pic47.png" alt="Pic 47"><div class="caption">Timeless gaze ⏳</div></div>
+    <div class="photo"><img src="pic48.png" alt="Pic 48"><div class="caption">Flawlessly festive 🎀</div></div>
+    <div class="photo"><img src="pic49.png" alt="Pic 49"><div class="caption">Winter magic moment 🧊</div></div>
+    <div class="photo"><img src="pic50.png" alt="Pic 50"><div class="caption">Dream girl vibes 💭</div></div>
+    <div class="photo"><img src="pic51.png" alt="Pic 51"><div class="caption">Chill day beauty 🌿</div></div>
+    <div class="photo"><img src="pic52.png" alt="Pic 52"><div class="caption">Golden glow up ✨</div></div>
+    <div class="photo"><img src="pic53.png" alt="Pic 53"><div class="caption">Enchanted evening 🌙</div></div>
+    <div class="photo"><img src="pic54.png" alt="Pic 54"><div class="caption">Radiant and rare 💎</div></div>
+    <div class="photo"><img src="pic55.png" alt="Pic 55"><div class="caption">Sunday softness 🌸</div></div>
+    <div class="photo"><img src="pic56.png" alt="Pic 56"><div class="caption">Infinite charm ♾️</div></div>
+    <div class="photo"><img src="pic57.png" alt="Pic 57"><div class="caption">Lively and lovely 🎈</div></div>
+    <div class="photo"><img src="pic58.png" alt="Pic 58"><div class="caption">Gentle spirit 🍃</div></div>
+    <div class="photo"><img src="pic59.png" alt="Pic 59"><div class="caption">Happiest glow ☀️</div></div>
+    <div class="photo"><img src="pic60.png" alt="Pic 60"><div class="caption">Serene stunner 🌼</div></div>
+    <div class="photo"><img src="pic61.png" alt="Pic 61"><div class="caption">Breezy beauty 🌬️</div></div>
+    <div class="photo"><img src="pic62.png" alt="Pic 62"><div class="caption">Charming as ever 💐</div></div>
+    <div class="photo"><img src="pic63.png" alt="Pic 63"><div class="caption">Blissful moments ✨</div></div>
+    <div class="photo"><img src="pic64.png" alt="Pic 64"><div class="caption">Sunset serenity 🌇</div></div>
+    <div class="photo"><img src="pic65.png" alt="Pic 65"><div class="caption">Sweet and stunning 🍭</div></div>
+    <div class="photo"><img src="pic66.png" alt="Pic 66"><div class="caption">Waves of wonder 🌊</div></div>
+    <div class="photo"><img src="pic67.png" alt="Pic 67"><div class="caption">Delicate and divine 🕊️</div></div>
+    <div class="photo"><img src="pic68.png" alt="Pic 68"><div class="caption">Snapshot of grace 📸</div></div>
+    <div class="photo"><img src="pic69.png" alt="Pic 69"><div class="caption">Aesthetic perfection 🎞️</div></div>
+    <div class="photo"><img src="pic70.png" alt="Pic 70"><div class="caption">Cozy glow vibes 🕯️</div></div>
+    <div class="photo"><img src="pic71.png" alt="Pic 71"><div class="caption">Moments like these 💭</div></div>
+    <div class="photo"><img src="pic72.png" alt="Pic 72"><div class="caption">Whimsy in focus 🧚</div></div>
+    <div class="photo"><img src="pic73.png" alt="Pic 73"><div class="caption">So softly radiant 🌸</div></div>
+    <div class="photo"><img src="pic74.png" alt="Pic 74"><div class="caption">Lovely through the lens 🎥</div></div>
+    </section>
 
-  <section id="gallery" class="gallery">
-  <div class="photo"><img src="pic1.png" alt="Pic 1"><div class="caption">That smile 🫠</div></div>
-  <div class="photo"><img src="pic2.png" alt="Pic 2"><div class="caption">Wholesome energy!</div></div>
-  <div class="photo"><img src="pic3.png" alt="Pic 3"><div class="caption">Heart = stolen 💘</div></div>
-  <div class="photo"><img src="pic4.png" alt="Pic 4"><div class="caption">Glowing in every light ✨</div></div>
-  <div class="photo"><img src="pic5.png" alt="Pic 5"><div class="caption">Joy in pixels 📸</div></div>
-  <div class="photo"><img src="pic6.png" alt="Pic 6"><div class="caption">Cuteness overload 💫</div></div>
-  <div class="photo"><img src="pic7.png" alt="Pic 7"><div class="caption">So aesthetic 🌸</div></div>
-  <div class="photo"><img src="pic8.png" alt="Pic 8"><div class="caption">Sunshine smile ☀️</div></div>
-  <div class="photo"><img src="pic9.png" alt="Pic 9"><div class="caption">Pure charm 💕</div></div>
-  <div class="photo"><img src="pic10.png" alt="Pic 10"><div class="caption">My fav look 💖</div></div>
-  <div class="photo"><img src="pic11.png" alt="Pic 11"><div class="caption">Sparkling eyes ✨</div></div>
-  <div class="photo"><img src="pic12.png" alt="Pic 12"><div class="caption">Goddess mode 😍</div></div>
-  <div class="photo"><img src="pic13.png" alt="Pic 13"><div class="caption">Dreamy vibes 🌙</div></div>
-  <div class="photo"><img src="pic14.png" alt="Pic 14"><div class="caption">Pretty in park 💗</div></div>
-  <div class="photo"><img src="pic15.png" alt="Pic 15"><div class="caption">Cutest outfit ever 🐾</div></div>
-  <div class="photo"><img src="pic16.png" alt="Pic 16"><div class="caption">Golden hour glow ✨</div></div>
-  <div class="photo"><img src="pic17.png" alt="Pic 17"><div class="caption">Look at that smile 💫</div></div>
-  <div class="photo"><img src="pic18.png" alt="Pic 18"><div class="caption">The cutest tilt 🥹</div></div>
-  <div class="photo"><img src="pic19.png" alt="Pic 19"><div class="caption">Bookish & beautiful 📚</div></div>
-  <div class="photo"><img src="pic20.png" alt="Pic 20"><div class="caption">Always radiant 💡</div></div>
-  <div class="photo"><img src="pic21.png" alt="Pic 21"><div class="caption">Soft cheeks and sunshine ☁️</div></div>
-  <div class="photo"><img src="pic22.png" alt="Pic 22"><div class="caption">Eyes that melt hearts 🥰</div></div>
-  <div class="photo"><img src="pic23.png" alt="Pic 23"><div class="caption">Unfiltered beauty 🌿</div></div>
-  <div class="photo"><img src="pic24.png" alt="Pic 24"><div class="caption">Café vibes and cuteness ☕</div></div>
-  <div class="photo"><img src="pic25.png" alt="Pic 25"><div class="caption">Elegance in pixels ✨</div></div>
-  <div class="photo"><img src="pic27.png" alt="Pic 27"><div class="caption">Dreamscape moments ✨</div></div>
-  <div class="photo"><img src="pic28.png" alt="Pic 28"><div class="caption">Serenity in a snapshot 🌸</div></div>
-  <div class="photo"><img src="pic29.png" alt="Pic 29"><div class="caption">Velvet dusk vibes 🌙</div></div>
-  <div class="photo"><img src="pic30.png" alt="Pic 30"><div class="caption">Golden memories 🧡</div></div>
-  <div class="photo"><img src="pic31.png" alt="Pic 31"><div class="caption">Grace and glow ✨</div></div>
-  <div class="photo"><img src="pic32.png" alt="Pic 32"><div class="caption">Simply stunning 💫</div></div>
-  <div class="photo"><img src="pic33.png" alt="Pic 33"><div class="caption">Forever fave 💕</div></div>
-  <div class="photo"><img src="pic34.png" alt="Pic 34"><div class="caption">Winter wonderland look ❄️</div></div>
-  <div class="photo"><img src="pic35.png" alt="Pic 35"><div class="caption">Snowy day smiles ☃️</div></div>
-  <div class="photo"><img src="pic36.png" alt="Pic 36"><div class="caption">Bliss in a frame 📷</div></div>
-  <div class="photo"><img src="pic37.png" alt="Pic 37"><div class="caption">Eyes full of wonder ✨</div></div>
-  <div class="photo"><img src="pic38.png" alt="Pic 38"><div class="caption">Gentle grace 💮</div></div>
-  <div class="photo"><img src="pic39.png" alt="Pic 39"><div class="caption">Captured magic 🪄</div></div>
-  <div class="photo"><img src="pic40.png" alt="Pic 40"><div class="caption">Frozen fairytale ❄️</div></div>
-  <div class="photo"><img src="pic41.png" alt="Pic 41"><div class="caption">Wanderlust eyes 🌍</div></div>
-  <div class="photo"><img src="pic42.png" alt="Pic 42"><div class="caption">Moments of gold 🌅</div></div>
-  <div class="photo"><img src="pic43.png" alt="Pic 43"><div class="caption">Cozy and charming 🧣</div></div>
-  <div class="photo"><img src="pic44.png" alt="Pic 44"><div class="caption">Muse mode activated 🎨</div></div>
-  <div class="photo"><img src="pic45.png" alt="Pic 45"><div class="caption">Snow-lit elegance 🌨️</div></div>
-  <div class="photo"><img src="pic46.png" alt="Pic 46"><div class="caption">Glow in the frost ❄️</div></div>
-  <div class="photo"><img src="pic47.png" alt="Pic 47"><div class="caption">Timeless gaze ⏳</div></div>
-  <div class="photo"><img src="pic48.png" alt="Pic 48"><div class="caption">Flawlessly festive 🎀</div></div>
-  <div class="photo"><img src="pic49.png" alt="Pic 49"><div class="caption">Winter magic moment 🧊</div></div>
-  <div class="photo"><img src="pic50.png" alt="Pic 50"><div class="caption">Dream girl vibes 💭</div></div>
-  <div class="photo"><img src="pic51.png" alt="Pic 51"><div class="caption">Chill day beauty 🌿</div></div>
-  <div class="photo"><img src="pic52.png" alt="Pic 52"><div class="caption">Golden glow up ✨</div></div>
-  <div class="photo"><img src="pic53.png" alt="Pic 53"><div class="caption">Enchanted evening 🌙</div></div>
-  <div class="photo"><img src="pic54.png" alt="Pic 54"><div class="caption">Radiant and rare 💎</div></div>
-  <div class="photo"><img src="pic55.png" alt="Pic 55"><div class="caption">Sunday softness 🌸</div></div>
-  <div class="photo"><img src="pic56.png" alt="Pic 56"><div class="caption">Infinite charm ♾️</div></div>
-  <div class="photo"><img src="pic57.png" alt="Pic 57"><div class="caption">Lively and lovely 🎈</div></div>
-  <div class="photo"><img src="pic58.png" alt="Pic 58"><div class="caption">Gentle spirit 🍃</div></div>
-  <div class="photo"><img src="pic59.png" alt="Pic 59"><div class="caption">Happiest glow ☀️</div></div>
-  <div class="photo"><img src="pic60.png" alt="Pic 60"><div class="caption">Serene stunner 🌼</div></div>
+    <section id="about" class="about">
+      <h2>About Her ✨</h2>
+      <p>Kind eyes, a warm heart, and elegance that inspires.</p>
+      <ul>
+        <li>AI-crafted portrait</li>
+        <li>Loves sunny days and good coffee</li>
+        <li>Finds joy in every dog she meets</li>
+      </ul>
+    </section>
 
-</section>
+    <footer>
+      Made with warm thoughts 🌸
+    </footer>
+  </main>
 
-
-  <section id="about" class="about">
-    <h2>About Her ✨</h2>
-    <p>Kind eyes, a warm heart, and elegance that inspires.</p>
-    <ul>
-      <li>AI-crafted portrait</li>
-      <li>Loves sunny days and good coffee</li>
-      <li>Finds joy in every dog she meets</li>
-    </ul>
-  </section>
-
-  <footer>
-    Made with warm thoughts 🌸
-  </footer>
-
+  <!-- Lightbox -->
   <div class="lightbox" id="lightbox">
     <button class="close">&times;</button>
     <button class="prev">&#10094;</button>
@@ -320,6 +373,7 @@
     <button class="next">&#10095;</button>
   </div>
 
+  <!-- Script -->
   <script>
     function toggleDarkMode() {
       document.body.classList.toggle('dark-mode');
@@ -356,54 +410,35 @@
       showImage();
     });
 
-    // Swipe support
-    let touchStartX = 0;
-    let touchEndX = 0;
-
-    lightbox.addEventListener('touchstart', e => {
-      touchStartX = e.changedTouches[0].screenX;
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) lightbox.classList.remove('show');
     });
 
+    // Touch swipe
+    let touchStartX = 0, touchEndX = 0;
+    lightbox.addEventListener('touchstart', e => touchStartX = e.changedTouches[0].screenX);
     lightbox.addEventListener('touchend', e => {
       touchEndX = e.changedTouches[0].screenX;
-      handleSwipe();
+      if (touchEndX < touchStartX - 50) {
+        currentIndex = (currentIndex + 1) % galleryImages.length;
+        showImage();
+      } else if (touchEndX > touchStartX + 50) {
+        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+        showImage();
+      }
     });
 
-    lightbox.addEventListener('click', (e) => {
-  // If you click directly on the background overlay (the lightbox div itself), close it
-  if (e.target === lightbox) {
-    lightbox.classList.remove('show');
-  }
-});
-
-
-    function handleSwipe() {
-      const threshold = 50;
-      if (touchEndX < touchStartX - threshold) {
-        currentIndex = (currentIndex + 1) % galleryImages.length;
-        showImage();
-      } else if (touchEndX > touchStartX + threshold) {
-        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-        showImage();
-      }
-    }
-
-    // Keyboard support
     document.addEventListener('keydown', e => {
       if (!lightbox.classList.contains('show')) return;
-      if (e.key === 'ArrowRight') {
-        currentIndex = (currentIndex + 1) % galleryImages.length;
-        showImage();
-      } else if (e.key === 'ArrowLeft') {
-        currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
-        showImage();
-      } else if (e.key === 'Escape') {
-        lightbox.classList.remove('show');
-      }
+      if (e.key === 'ArrowRight') currentIndex = (currentIndex + 1) % galleryImages.length;
+      else if (e.key === 'ArrowLeft') currentIndex = (currentIndex - 1 + galleryImages.length) % galleryImages.length;
+      else if (e.key === 'Escape') lightbox.classList.remove('show');
+      showImage();
     });
   </script>
 </body>
 </html>
+
 
 
 
