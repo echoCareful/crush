@@ -245,6 +245,78 @@
       .sidebar h1 {
         font-size: 1.2em;
       }
+
+      @media (max-width: 768px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    height: auto;
+    padding: 10px 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: none;
+    background: var(--sidebar-bg);
+    z-index: 10;
+  }
+
+  .sidebar nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    margin: 10px 0;
+  }
+
+  .sidebar .theme-buttons {
+    margin-top: 10px;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .hero img {
+    width: 90%;
+    max-width: 100%;
+  }
+
+  .gallery {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 10px;
+  }
+
+  .caption {
+    font-size: 0.85em;
+    padding: 6px;
+  }
+
+  .about {
+    padding: 15px;
+    font-size: 0.95em;
+  }
+
+  footer {
+    font-size: 0.9em;
+    padding: 15px;
+  }
+
+  .lightbox img {
+    max-width: 95%;
+    max-height: 80vh;
+  }
+
+  .lightbox .close,
+  .lightbox .prev,
+  .lightbox .next {
+    font-size: 1.5em;
+    padding: 0.3em;
+  }
+}
+
+
     }
   </style>
 </head>
@@ -270,18 +342,18 @@
     </section>
 
     <section class="hero">
-      <img src="pic26.png" alt="Portrait of elegance"/>
+      <img src="pic75.png" alt="Portrait of elegance"/>
       <div class="quote">"A smile that lingers in memory."</div>
     </section>
 
     <section id="gallery" class="gallery">
-     <div class="photo"><img src="pic1.png" alt="Pic 1"><div class="caption">That smile 🫠</div></div>
-    <div class="photo"><img src="pic2.png" alt="Pic 2"><div class="caption">Wholesome energy!</div></div>
+    <div class="photo"><img src="pic76.png" alt="Pic 1"><div class="caption">That smile 🫠</div></div>
+    <div class="photo"><img src="pic7.png" alt="Pic 2"><div class="caption">Wholesome energy!</div></div>
     <div class="photo"><img src="pic3.png" alt="Pic 3"><div class="caption">Heart = stolen 💘</div></div>
     <div class="photo"><img src="pic4.png" alt="Pic 4"><div class="caption">Glowing in every light ✨</div></div>
     <div class="photo"><img src="pic5.png" alt="Pic 5"><div class="caption">Joy in pixels 📸</div></div>
     <div class="photo"><img src="pic6.png" alt="Pic 6"><div class="caption">Cuteness overload 💫</div></div>
-    <div class="photo"><img src="pic7.png" alt="Pic 7"><div class="caption">So aesthetic 🌸</div></div>
+    <div class="photo"><img src="pic2.png" alt="Pic 7"><div class="caption">So aesthetic 🌸</div></div>
     <div class="photo"><img src="pic8.png" alt="Pic 8"><div class="caption">Sunshine smile ☀️</div></div>
     <div class="photo"><img src="pic9.png" alt="Pic 9"><div class="caption">Pure charm 💕</div></div>
     <div class="photo"><img src="pic10.png" alt="Pic 10"><div class="caption">My fav look 💖</div></div>
@@ -348,6 +420,28 @@
     <div class="photo"><img src="pic72.png" alt="Pic 72"><div class="caption">Whimsy in focus 🧚</div></div>
     <div class="photo"><img src="pic73.png" alt="Pic 73"><div class="caption">So softly radiant 🌸</div></div>
     <div class="photo"><img src="pic74.png" alt="Pic 74"><div class="caption">Lovely through the lens 🎥</div></div>
+    <div class="photo"><img src="pic26.png" alt="Pic 75"><div class="caption">Pure poetry in pixels 📖</div></div>
+    <div class="photo"><img src="pic1.png" alt="Pic 76"><div class="caption">Vibes = immaculate ✨</div></div>
+    <div class="photo"><img src="pic77.png" alt="Pic 77"><div class="caption">Magnetic smile 💞</div></div>
+    <div class="photo"><img src="pic78.png" alt="Pic 78"><div class="caption">Radiates joy 🌟</div></div>
+    <div class="photo"><img src="pic79.png" alt="Pic 79"><div class="caption">Effortlessly elegant 👑</div></div>
+    <div class="photo"><img src="pic80.png" alt="Pic 80"><div class="caption">Soothing aura 🌷</div></div>
+    <div class="photo"><img src="pic81.png" alt="Pic 81"><div class="caption">Just wow 😍</div></div>
+    <div class="photo"><img src="pic82.png" alt="Pic 82"><div class="caption">Golden sparkle moments ✨</div></div>
+    <div class="photo"><img src="pic83.png" alt="Pic 83"><div class="caption">Simply angelic 👼</div></div>
+    <div class="photo"><img src="pic84.png" alt="Pic 84"><div class="caption">Cinematic charm 🎬</div></div>
+    <div class="photo"><img src="pic85.png" alt="Pic 85"><div class="caption">The softest glow 🌅</div></div>
+    <div class="photo"><img src="pic86.png" alt="Pic 86"><div class="caption">Serene and stunning 🌿</div></div>
+    <div class="photo"><img src="pic87.png" alt="Pic 87"><div class="caption">Glimmering gaze ✨</div></div>
+    <div class="photo"><img src="pic88.png" alt="Pic 88"><div class="caption">Breathtaking as always 💓</div></div>
+    <div class="photo"><img src="pic89.png" alt="Pic 89"><div class="caption">Effortless sunshine ☀️</div></div>
+    <div class="photo"><img src="pic90.png" alt="Pic 90"><div class="caption">Whispers of beauty 🌬️</div></div>
+    <div class="photo"><img src="pic91.png" alt="Pic 91"><div class="caption">A real-life fairytale 🏰</div></div>
+    <div class="photo"><img src="pic92.png" alt="Pic 92"><div class="caption">Chasing light and love 💡</div></div>
+    <div class="photo"><img src="pic93.png" alt="Pic 93"><div class="caption">Too cute to handle 🥰</div></div>
+    <div class="photo"><img src="pic94.png" alt="Pic 94"><div class="caption">Soft glow queen 👸</div></div>
+    <div class="photo"><img src="pic95.png" alt="Pic 95"><div class="caption">Captured bliss 💫</div></div>
+
     </section>
 
     <section id="about" class="about">
@@ -438,9 +532,6 @@
   </script>
 </body>
 </html>
-
-
-
 
 
 <!--
