@@ -1,315 +1,320 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cinematic Drama Gallery</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portrait Gallery</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet">
   <style>
     :root {
-      --accent: #d4af37;
-      --bg-dark: #000;
-      --glow: rgba(212,175,55,0.45);
-      --gold: #bfa14a;
-      --phi: 1.618;
+      --bg: #fff;
+      --text: #111;
+      --accent: #555;
     }
-
+    [data-theme="dark"] {
+      --bg: #111;
+      --text: #eee;
+      --accent: #888;
+    }
     * {
+      box-sizing: border-box;
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
     }
-
-    html, body {
-      height: 100%;
-      width: 100%;
-      background: var(--bg-dark);
-      overflow-x: hidden;
-      scroll-behavior: smooth;
+    body {
       font-family: 'Inter', sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background 0.3s, color 0.3s;
     }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.05), transparent 70%),
-                  linear-gradient(135deg, rgba(212,175,55,0.1) 0%, transparent 100%);
-      mix-blend-mode: overlay;
-      z-index: 0;
-      animation: glowShift 20s infinite alternate ease-in-out;
-    }
-
-    @keyframes glowShift {
-      0% { transform: scale(1) rotate(0deg); opacity: 0.3; }
-      100% { transform: scale(1.2) rotate(15deg); opacity: 0.5; }
-    }
-
     header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      padding: 1rem 2rem;
-      background: rgba(0,0,0,0.7);
-      color: var(--gold);
-      font-weight: 500;
-      z-index: 10;
-      text-align: center;
-      letter-spacing: 1px;
-      backdrop-filter: blur(4px);
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
+      padding: 1rem 2rem;
+      background-color: var(--bg);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid var(--accent);
+    }
+    nav a {
+      margin: 0 1rem;
+      text-decoration: none;
+      color: var(--text);
+      font-weight: 500;
+    }
+    .toggle-btn {
+      cursor: pointer;
+      font-size: 1.2em;
     }
 
-    /* Back button */
-    .back-btn {
-    position: absolute;
-    left: 2rem;
-    font-size: 1.5rem;
-    color: var(--gold);
-    cursor: pointer;
-    user-select: none;
-    text-decoration: none;
-    transition: all 0.3s ease;
-    border: 2px solid var(--gold);
-    padding: 0.3rem 0.8rem;
-    border-radius: 0.4rem;
-    backdrop-filter: blur(4px);
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 2rem;
+    }
+    .hero-img {
+      flex: 1;
+      padding: 1rem;
+      text-align: center;
+    }
+    .hero-img img {
+      width: 100%;
+      max-width: 400px;
+      height: auto;
+      cursor: pointer;
+      border-radius: 8px;
+    }
+    .hero-text {
+      flex: 1;
+      padding: 1rem;
+    }
+    .hero-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2em;
+      margin-bottom: 0.5rem;
     }
 
-    .back-btn:hover {
-    opacity: 0.85;
-    transform: scale(1.05);
-    box-shadow: 0 0 15px var(--glow);
+    .gallery {
+      column-count: 3;
+      column-gap: 1rem;
+      padding: 2rem;
+    }
+    .gallery img {
+      width: 100%;
+      margin-bottom: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .gallery img:hover {
+      transform: scale(1.02);
+    }
+    @media (max-width: 900px) {
+      .gallery {
+        column-count: 2;
+      }
+    }
+    @media (max-width: 600px) {
+      .hero {
+        flex-direction: column;
+      }
+      .gallery {
+        column-count: 1;
+      }
     }
 
     footer {
-      position: relative;
-      padding: 1rem 0;
       text-align: center;
-      color: var(--gold);
-      opacity: 0.7;
-      z-index: 2;
+      padding: 2rem;
+      border-top: 1px solid var(--accent);
+      font-size: 0.9em;
+    }
+    .social-icons a {
+      margin: 0 0.5rem;
+      color: var(--text);
+      text-decoration: none;
+      font-size: 1.2em;
     }
 
-    main {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: calc(1rem * var(--phi));
-      width: min(96%, 1600px);
-      margin: 6rem auto 4rem auto;
-      position: relative;
-      z-index: 2;
-    }
-
-    .photo-wrapper {
-      position: relative;
-    }
-
-    main img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      aspect-ratio: 16/9;
-      border-radius: 0.6rem;
-      cursor: pointer;
-      transform: scale(1) translateY(20px);
-      opacity: 0;
-      animation: fadeIn 1.2s ease forwards;
-      filter: brightness(0.85) contrast(1.15) saturate(1.1);
-      transition: transform 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease;
-      display: block;
-    }
-
-    main img:hover {
-      transform: scale(1.03);
-      filter: brightness(1) contrast(1.2);
-      box-shadow: 0 0 35px var(--glow);
-    }
-
-    @keyframes fadeIn {
-      to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-      }
-    }
-
-    .photo-number {
-      position: absolute;
-      bottom: 0.5rem;
-      left: 0.5rem;
-      font-size: 1rem;
-      color: var(--gold);
-      text-shadow: 0 0 10px rgba(0,0,0,0.8);
-      pointer-events: none;
-      font-weight: 600;
-    }
-
-    main::after {
-      content: "";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background: radial-gradient(circle at center, transparent 70%, rgba(0,0,0,0.7));
-      z-index: 1;
-    }
-
+    /* Lightbox */
     .lightbox {
       position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.95);
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
       display: flex;
-      align-items: center;
       justify-content: center;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-      z-index: 100;
+      align-items: center;
+      z-index: 999;
+      display: none;
     }
-
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 8px;
+    }
     .lightbox.active {
-      opacity: 1;
-      pointer-events: auto;
+      display: flex;
+    }
+    .lightbox:after {
+      content: '✕';
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: #fff;
+      font-size: 2em;
+      cursor: pointer;
+    }
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.9);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
     }
 
     .lightbox img {
-      max-width: 96%;
-      max-height: 92%;
-      border-radius: 0.6rem;
-      box-shadow: 0 0 60px var(--glow);
-      transform: scale(0.9);
-      opacity: 0;
-      animation: zoomReveal 0.7s ease forwards;
+      max-width: 90vw;
+      max-height: 90vh;
+      transition: all 0.3s ease-in-out;
     }
-
-    @keyframes zoomReveal {
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
-
-    .nav-btn {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 3rem;
-      color: var(--gold);
-      cursor: pointer;
-      opacity: 0.5;
-      transition: opacity 0.3s;
-      user-select: none;
-      z-index: 101;
-      text-shadow: 0 0 15px var(--glow);
-    }
-
-    .nav-btn:hover { opacity: 1; }
-
-    .nav-left { left: 2rem; }
-    .nav-right { right: 2rem; }
-
-    .close-btn {
-      position: absolute;
-      top: 2rem;
-      right: 2rem;
-      font-size: 2.5rem;
-      color: var(--gold);
-      cursor: pointer;
-      opacity: 0.6;
-      transition: opacity 0.3s;
-      user-select: none;
-      text-shadow: 0 0 15px var(--glow);
-      z-index: 102;
-    }
-
-    .close-btn:hover { opacity: 1; }
 
   </style>
 </head>
-<body>
+<body data-theme="light">
   <header>
-    <a href="index.html" class="back-btn">&#8592; Back</a>
-    Cinematic Drama Gallery
+    <div class="logo"><strong>Grace</strong></div>
+    <nav>
+      <a href="#gallery">Gallery</a>
+      <a href="flashy.html">Flashy</a>
+      <a href="#about">About</a>
+      <span class="toggle-btn" onclick="toggleTheme()">☀️ / 🌙</span>
+    </nav>
   </header>
-  <main id="gallery"></main>
-  <footer>© 2025 Cinematic Drama Gallery</footer>
 
-  <div id="lightbox" class="lightbox">
-    <span class="close-btn">&times;</span>
-    <span class="nav-btn nav-left">&#10094;</span>
-    <span class="nav-btn nav-right">&#10095;</span>
-    <img src="" alt="">
+  <section class="hero">
+    <div class="hero-img">
+      <img src="pic75.png" alt="Portrait" onclick="openLightbox(this.src)" />
+    </div>
+    <div class="hero-text" id="about">
+      <h1>Grace & Light</h1>
+      <p>She carries elegance in every glance, and grace in every moment. This is her story, captured in frames of light and love.</p>
+    </div>
+  </section>
+
+  <section id="gallery" class="gallery">
+    
+  </section>
+  <footer>
+    <p>© 2025 Grace Portrait Gallery</p>
+    <div class="social-icons">
+      <a href="#">Instagram</a>
+      <a href="#">Twitter</a>
+      <a href="#">Email</a>
+    </div>
+  </footer>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+    <img id="lightbox-img" src="" alt="Lightbox" />
   </div>
 
   <script>
+
     const gallery = document.getElementById('gallery');
 
     for (let i = 1; i <= 200; i++) {
-      const wrapper = document.createElement('div');
-      wrapper.className = 'photo-wrapper';
-      
+      const photoDiv = document.createElement('div');
+      photoDiv.className = 'photo';
+
       const img = document.createElement('img');
-      img.src = `pic${i}.png`;
-      img.loading = 'lazy';
-      img.alt = '';
-      img.dataset.index = i;
-      img.style.animationDelay = `${i * 0.05}s`;
-      img.onclick = () => openLightbox(i);
+      img.src = `pic${i}.png`; // image file name pattern
+      img.alt = `Pic ${i}`;
+      img.setAttribute('data-lightbox', 'gallery');
+      img.onclick = () => openLightbox(img.src);
 
-      const number = document.createElement('div');
-      number.className = 'photo-number';
-      number.textContent = i;
-
-      wrapper.appendChild(img);
-      wrapper.appendChild(number);
-      gallery.appendChild(wrapper);
+      photoDiv.appendChild(img);
+      gallery.appendChild(photoDiv);
     }
 
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = lightbox.querySelector('img');
-    const closeBtn = document.querySelector('.close-btn');
-    const navLeft = document.querySelector('.nav-left');
-    const navRight = document.querySelector('.nav-right');
-    let currentIndex = -1;
 
-    function openLightbox(index) {
-      currentIndex = index;
-      lightboxImg.src = `pic${currentIndex}.png`;
-      lightbox.classList.add('active');
+    function toggleTheme() {
+      const body = document.body;
+      const theme = body.getAttribute("data-theme");
+      body.setAttribute("data-theme", theme === "dark" ? "light" : "dark");
+    }
+
+    function openLightbox(src) {
+      const lightbox = document.getElementById("lightbox");
+      const img = document.getElementById("lightbox-img");
+      img.src = src;
+      lightbox.classList.add("active");
     }
 
     function closeLightbox() {
-      lightbox.classList.remove('active');
-      lightboxImg.src = '';
+      document.getElementById("lightbox").classList.remove("active");
     }
+  const images = Array.from(document.querySelectorAll('.gallery img'));
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
 
-    function showNext() {
-      currentIndex = currentIndex < totalImages ? currentIndex + 1 : 1;
-      lightboxImg.src = `pic${currentIndex}.png`;
-    }
+  let currentIndex = 0;
 
-    function showPrev() {
-      currentIndex = currentIndex > 1 ? currentIndex - 1 : totalImages;
-      lightboxImg.src = `pic${currentIndex}.png`;
-    }
-
-    closeBtn.addEventListener('click', closeLightbox);
-    navLeft.addEventListener('click', showPrev);
-    navRight.addEventListener('click', showNext);
-
-    lightbox.addEventListener('click', (e) => {
-      if (e.target === lightbox) closeLightbox();
+  images.forEach((img, index) => {
+    img.addEventListener('click', (e) => {
+      e.stopPropagation();
+      currentIndex = index;
+      openLightbox(img.src);
     });
+  });
 
-    document.addEventListener('keydown', (e) => {
-      if (!lightbox.classList.contains('active')) return;
-      switch (e.key) {
-        case 'Escape': closeLightbox(); break;
-        case 'ArrowRight': showNext(); break;
-        case 'ArrowLeft': showPrev(); break;
-      }
-    });
+  function openLightbox(src) {
+    lightbox.style.display = 'flex';
+    lightboxImg.src = src;
+  }
+
+  function closeLightbox() {
+    lightbox.style.display = 'none';
+  }
+
+  function showImage(index) {
+    if (index >= 0 && index < images.length) {
+      currentIndex = index;
+      lightboxImg.src = images[currentIndex].src;
+    }
+  }
+
+  // Keyboard navigation
+  document.addEventListener('keydown', (e) => {
+    if (lightbox.style.display === 'flex') {
+      if (e.key === 'ArrowRight') showImage(currentIndex + 1);
+      if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
+      if (e.key === 'Escape') closeLightbox();
+    }
+  });
+
+  // Swipe support
+  let startX = 0;
+
+  lightbox.addEventListener('touchstart', (e) => {
+    startX = e.changedTouches[0].screenX;
+  });
+
+  lightbox.addEventListener('touchend', (e) => {
+    const endX = e.changedTouches[0].screenX;
+    const diff = startX - endX;
+
+    if (diff > 50) {
+      // Swiped left
+      showImage(currentIndex + 1);
+    } else if (diff < -50) {
+      // Swiped right
+      showImage(currentIndex - 1);
+    }
+  });
+
   </script>
 </body>
 </html>
+
+
+
+
+<!--
+
+A young woman with a softly defined oval face, warm light-to-medium skin tone, and a delicate, 
+natural glow. She has symmetrical facial features with softly arched eyebrows, large almond-shaped hazel eyes framed by 
+long lashes, and a subtle winged eyeliner look. Her nose is narrow and straight, and her lips are full with a gentle 
+smile and defined cupid’s bow. She has long, dark brown hair styled in soft, natural waves, with a center part and 
+light layering that frames her face. Her hairstyle is smooth and slightly voluminous, giving a soft romantic vibe 
+Maintain her exact face and hairstyle as described: long dark brown hair in soft waves with a center part, oval face, 
+hazel almond eyes, full lips with a soft smile woman posing confidently in a luxurious red satin dress, off-shoulder design, 
+soft waves in her hair, a gentle smile, seductive yet classy look.
+
+-->
