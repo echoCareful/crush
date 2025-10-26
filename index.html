@@ -1,499 +1,315 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Portrait Gallery</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Inter&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cinematic Drama Gallery</title>
   <style>
     :root {
-      --bg: #fff;
-      --text: #111;
-      --accent: #555;
+      --accent: #d4af37;
+      --bg-dark: #000;
+      --glow: rgba(212,175,55,0.45);
+      --gold: #bfa14a;
+      --phi: 1.618;
     }
-    [data-theme="dark"] {
-      --bg: #111;
-      --text: #eee;
-      --accent: #888;
-    }
+
     * {
-      box-sizing: border-box;
       margin: 0;
       padding: 0;
+      box-sizing: border-box;
     }
-    body {
+
+    html, body {
+      height: 100%;
+      width: 100%;
+      background: var(--bg-dark);
+      overflow-x: hidden;
+      scroll-behavior: smooth;
       font-family: 'Inter', sans-serif;
-      background-color: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      transition: background 0.3s, color 0.3s;
     }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, rgba(255,215,0,0.05), transparent 70%),
+                  linear-gradient(135deg, rgba(212,175,55,0.1) 0%, transparent 100%);
+      mix-blend-mode: overlay;
+      z-index: 0;
+      animation: glowShift 20s infinite alternate ease-in-out;
+    }
+
+    @keyframes glowShift {
+      0% { transform: scale(1) rotate(0deg); opacity: 0.3; }
+      100% { transform: scale(1.2) rotate(15deg); opacity: 0.5; }
+    }
+
     header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1rem 2rem;
-      background-color: var(--bg);
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 100;
-      border-bottom: 1px solid var(--accent);
-    }
-    nav a {
-      margin: 0 1rem;
-      text-decoration: none;
-      color: var(--text);
+      left: 0;
+      width: 100%;
+      padding: 1rem 2rem;
+      background: rgba(0,0,0,0.7);
+      color: var(--gold);
       font-weight: 500;
-    }
-    .toggle-btn {
-      cursor: pointer;
-      font-size: 1.2em;
-    }
-
-    .hero {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      padding: 2rem;
-    }
-    .hero-img {
-      flex: 1;
-      padding: 1rem;
+      z-index: 10;
       text-align: center;
-    }
-    .hero-img img {
-      width: 100%;
-      max-width: 400px;
-      height: auto;
-      cursor: pointer;
-      border-radius: 8px;
-    }
-    .hero-text {
-      flex: 1;
-      padding: 1rem;
-    }
-    .hero-text h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 2em;
-      margin-bottom: 0.5rem;
+      letter-spacing: 1px;
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .gallery {
-      column-count: 3;
-      column-gap: 1rem;
-      padding: 2rem;
+    /* Back button */
+    .back-btn {
+    position: absolute;
+    left: 2rem;
+    font-size: 1.5rem;
+    color: var(--gold);
+    cursor: pointer;
+    user-select: none;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    border: 2px solid var(--gold);
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.4rem;
+    backdrop-filter: blur(4px);
     }
-    .gallery img {
-      width: 100%;
-      margin-bottom: 1rem;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
-    .gallery img:hover {
-      transform: scale(1.02);
-    }
-    @media (max-width: 900px) {
-      .gallery {
-        column-count: 2;
-      }
-    }
-    @media (max-width: 600px) {
-      .hero {
-        flex-direction: column;
-      }
-      .gallery {
-        column-count: 1;
-      }
+
+    .back-btn:hover {
+    opacity: 0.85;
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--glow);
     }
 
     footer {
+      position: relative;
+      padding: 1rem 0;
       text-align: center;
-      padding: 2rem;
-      border-top: 1px solid var(--accent);
-      font-size: 0.9em;
-    }
-    .social-icons a {
-      margin: 0 0.5rem;
-      color: var(--text);
-      text-decoration: none;
-      font-size: 1.2em;
+      color: var(--gold);
+      opacity: 0.7;
+      z-index: 2;
     }
 
-    /* Lightbox */
-    .lightbox {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 999;
-      display: none;
+    main {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: calc(1rem * var(--phi));
+      width: min(96%, 1600px);
+      margin: 6rem auto 4rem auto;
+      position: relative;
+      z-index: 2;
     }
-    .lightbox img {
-      max-width: 90%;
-      max-height: 90%;
-      border-radius: 8px;
+
+    .photo-wrapper {
+      position: relative;
     }
-    .lightbox.active {
-      display: flex;
-    }
-    .lightbox:after {
-      content: '✕';
-      position: absolute;
-      top: 20px;
-      right: 30px;
-      color: #fff;
-      font-size: 2em;
+
+    main img {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      aspect-ratio: 16/9;
+      border-radius: 0.6rem;
       cursor: pointer;
+      transform: scale(1) translateY(20px);
+      opacity: 0;
+      animation: fadeIn 1.2s ease forwards;
+      filter: brightness(0.85) contrast(1.15) saturate(1.1);
+      transition: transform 0.4s ease, filter 0.4s ease, box-shadow 0.4s ease;
+      display: block;
     }
-    .lightbox {
-      display: none;
+
+    main img:hover {
+      transform: scale(1.03);
+      filter: brightness(1) contrast(1.2);
+      box-shadow: 0 0 35px var(--glow);
+    }
+
+    @keyframes fadeIn {
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .photo-number {
+      position: absolute;
+      bottom: 0.5rem;
+      left: 0.5rem;
+      font-size: 1rem;
+      color: var(--gold);
+      text-shadow: 0 0 10px rgba(0,0,0,0.8);
+      pointer-events: none;
+      font-weight: 600;
+    }
+
+    main::after {
+      content: "";
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.9);
-      justify-content: center;
+      inset: 0;
+      pointer-events: none;
+      background: radial-gradient(circle at center, transparent 70%, rgba(0,0,0,0.7));
+      z-index: 1;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.95);
+      display: flex;
       align-items: center;
-      z-index: 1000;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+      z-index: 100;
+    }
+
+    .lightbox.active {
+      opacity: 1;
+      pointer-events: auto;
     }
 
     .lightbox img {
-      max-width: 90vw;
-      max-height: 90vh;
-      transition: all 0.3s ease-in-out;
+      max-width: 96%;
+      max-height: 92%;
+      border-radius: 0.6rem;
+      box-shadow: 0 0 60px var(--glow);
+      transform: scale(0.9);
+      opacity: 0;
+      animation: zoomReveal 0.7s ease forwards;
     }
+
+    @keyframes zoomReveal {
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
+    }
+
+    .nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 3rem;
+      color: var(--gold);
+      cursor: pointer;
+      opacity: 0.5;
+      transition: opacity 0.3s;
+      user-select: none;
+      z-index: 101;
+      text-shadow: 0 0 15px var(--glow);
+    }
+
+    .nav-btn:hover { opacity: 1; }
+
+    .nav-left { left: 2rem; }
+    .nav-right { right: 2rem; }
+
+    .close-btn {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      font-size: 2.5rem;
+      color: var(--gold);
+      cursor: pointer;
+      opacity: 0.6;
+      transition: opacity 0.3s;
+      user-select: none;
+      text-shadow: 0 0 15px var(--glow);
+      z-index: 102;
+    }
+
+    .close-btn:hover { opacity: 1; }
 
   </style>
 </head>
-<body data-theme="light">
+<body>
   <header>
-    <div class="logo"><strong>Grace</strong></div>
-    <nav>
-      <a href="#gallery">Gallery</a>
-      <a href="#about">About</a>
-      <span class="toggle-btn" onclick="toggleTheme()">☀️ / 🌙</span>
-    </nav>
+    <a href="index.html" class="back-btn">&#8592; Back</a>
+    Cinematic Drama Gallery
   </header>
+  <main id="gallery"></main>
+  <footer>© 2025 Cinematic Drama Gallery</footer>
 
-  <section class="hero">
-    <div class="hero-img">
-      <img src="pic75.png" alt="Portrait" onclick="openLightbox(this.src)" />
-    </div>
-    <div class="hero-text" id="about">
-      <h1>Grace & Light</h1>
-      <p>She carries elegance in every glance, and grace in every moment. This is her story, captured in frames of light and love.</p>
-    </div>
-  </section>
-
-  <section id="gallery" class="gallery">
-    <div class="photo"><img src="pic76.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 1"></div>
-    <div class="photo"><img src="pic7.png"  data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 2"></div>
-    <div class="photo"><img src="pic3.png"  data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 3"></div>
-    <div class="photo"><img src="pic4.png"  data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 4"></div>
-    <div class="photo"><img src="pic5.png"  data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 5"></div>
-    <div class="photo"><img src="pic6.png"  data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 6"></div>
-    <div class="photo"><img src="pic2.png"  data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 7"></div>
-    <div class="photo"><img src="pic8.png"  data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 8"></div>
-    <div class="photo"><img src="pic9.png"  data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 9"></div>
-    <div class="photo"><img src="pic10.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 10"></div>
-    <div class="photo"><img src="pic11.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 11"></div>
-    <div class="photo"><img src="pic12.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 12"></div>
-    <div class="photo"><img src="pic13.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 13"></div>
-    <div class="photo"><img src="pic14.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 14"></div>
-    <div class="photo"><img src="pic15.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 15"></div>
-    <div class="photo"><img src="pic16.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 16"></div>
-    <div class="photo"><img src="pic17.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 17"></div>
-    <div class="photo"><img src="pic18.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 18"></div>
-    <div class="photo"><img src="pic19.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 19"></div>
-    <div class="photo"><img src="pic20.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 20"></div>
-    <div class="photo"><img src="pic21.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 21"></div>
-    <div class="photo"><img src="pic22.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 22"></div>
-    <div class="photo"><img src="pic23.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 23"></div>
-    <div class="photo"><img src="pic24.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 24"></div>
-    <div class="photo"><img src="pic25.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 25"></div>
-    <div class="photo"><img src="pic27.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 27"></div>
-    <div class="photo"><img src="pic28.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 28"></div>
-    <div class="photo"><img src="pic29.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 29"></div>
-    <div class="photo"><img src="pic30.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 30"></div>
-    <div class="photo"><img src="pic31.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 31"></div>
-    <div class="photo"><img src="pic32.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 32"></div>
-    <div class="photo"><img src="pic33.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 33"></div>
-    <div class="photo"><img src="pic34.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 34"></div>
-    <div class="photo"><img src="pic35.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 35"></div>
-    <div class="photo"><img src="pic36.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 36"></div>
-    <div class="photo"><img src="pic37.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 37"></div>
-    <div class="photo"><img src="pic38.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 38"></div>
-    <div class="photo"><img src="pic39.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 39"></div>
-    <div class="photo"><img src="pic40.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 40"></div>
-    <div class="photo"><img src="pic41.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 41"></div>
-    <div class="photo"><img src="pic42.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 42"></div>
-    <div class="photo"><img src="pic43.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 43"></div>
-    <div class="photo"><img src="pic44.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 44"></div>
-    <div class="photo"><img src="pic45.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 45"></div>
-    <div class="photo"><img src="pic46.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 46"></div>
-    <div class="photo"><img src="pic47.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 47"></div>
-    <div class="photo"><img src="pic48.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 48"></div>
-    <div class="photo"><img src="pic49.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 49"></div>
-    <div class="photo"><img src="pic50.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 50"></div>
-    <div class="photo"><img src="pic51.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 51"></div>
-    <div class="photo"><img src="pic52.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 52"></div>
-    <div class="photo"><img src="pic53.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 53"></div>
-    <div class="photo"><img src="pic54.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 54"></div>
-    <div class="photo"><img src="pic55.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 55"></div>
-    <div class="photo"><img src="pic56.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 56"></div>
-    <div class="photo"><img src="pic57.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 57"></div>
-    <div class="photo"><img src="pic58.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 58"></div>
-    <div class="photo"><img src="pic59.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 59"></div>
-    <div class="photo"><img src="pic60.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 60"></div>
-    <div class="photo"><img src="pic61.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 61"></div>
-    <div class="photo"><img src="pic62.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 62"></div>
-    <div class="photo"><img src="pic63.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 63"></div>
-    <div class="photo"><img src="pic64.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 64"></div>
-    <div class="photo"><img src="pic65.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 65"></div>
-    <div class="photo"><img src="pic66.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 66"></div>
-    <div class="photo"><img src="pic67.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 67"></div>
-    <div class="photo"><img src="pic68.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 68"></div>
-    <div class="photo"><img src="pic69.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 69"></div>
-    <div class="photo"><img src="pic70.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 70"></div>
-    <div class="photo"><img src="pic71.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 71"></div>
-    <div class="photo"><img src="pic72.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 72"></div>
-    <div class="photo"><img src="pic73.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 73"></div>
-    <div class="photo"><img src="pic74.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 74"></div>
-    <div class="photo"><img src="pic26.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 75"></div>
-    <div class="photo"><img src="pic1.png"  data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 76"></div>
-    <div class="photo"><img src="pic77.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 77"></div>
-    <div class="photo"><img src="pic78.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 78"></div>
-    <div class="photo"><img src="pic79.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 79"></div>
-    <div class="photo"><img src="pic80.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 80"></div>
-    <div class="photo"><img src="pic81.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 81"></div>
-    <div class="photo"><img src="pic82.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 82"></div>
-    <div class="photo"><img src="pic83.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 83"></div>
-    <div class="photo"><img src="pic84.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 84"></div>
-    <div class="photo"><img src="pic85.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 85"></div>
-    <div class="photo"><img src="pic86.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 86"></div>
-    <div class="photo"><img src="pic87.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 87"></div>
-    <div class="photo"><img src="pic88.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 88"></div>
-    <div class="photo"><img src="pic89.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 89"></div>
-    <div class="photo"><img src="pic90.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 90"></div>
-    <div class="photo"><img src="pic91.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 91"></div>
-    <div class="photo"><img src="pic92.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 92"></div>
-    <div class="photo"><img src="pic93.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 93"></div>
-    <div class="photo"><img src="pic94.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 94"></div>
-    <div class="photo"><img src="pic95.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 95"></div>
-    <div class="photo"><img src="pic96.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 96"></div>
-    <div class="photo"><img src="pic97.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 97"></div>
-    <div class="photo"><img src="pic98.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 98"></div>
-    <div class="photo"><img src="pic99.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 99"></div>
-    <div class="photo"><img src="pic100.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 100"></div>
-    <div class="photo"><img src="pic101.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 101"></div>
-    <div class="photo"><img src="pic102.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 102"></div>
-    <div class="photo"><img src="pic103.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 103"></div>
-    <div class="photo"><img src="pic104.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 104"></div>
-    <div class="photo"><img src="pic105.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 105"></div>
-    <div class="photo"><img src="pic106.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 106"></div>
-    <div class="photo"><img src="pic107.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 107"></div>
-    <div class="photo"><img src="pic108.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 108"></div>
-    <div class="photo"><img src="pic109.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 109"></div>
-    <div class="photo"><img src="pic110.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 110"></div>
-    <div class="photo"><img src="pic111.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 111"></div>
-    <div class="photo"><img src="pic112.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 112"></div>
-    <div class="photo"><img src="pic113.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 113"></div>
-    <div class="photo"><img src="pic114.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 114"></div>
-    <div class="photo"><img src="pic115.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 115"></div>
-    <div class="photo"><img src="pic116.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 116"></div>
-    <div class="photo"><img src="pic117.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 117"></div>
-    <div class="photo"><img src="pic118.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 118"></div>
-    <div class="photo"><img src="pic119.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 119"></div>
-    <div class="photo"><img src="pic120.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 120"></div>
-    <div class="photo"><img src="pic121.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 121"></div>
-    <div class="photo"><img src="pic122.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 122"></div>
-    <div class="photo"><img src="pic123.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 123"></div>
-    <div class="photo"><img src="pic124.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 124"></div>
-    <div class="photo"><img src="pic125.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 125"></div>
-    <div class="photo"><img src="pic126.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 126"></div>
-    <div class="photo"><img src="pic127.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 127"></div>
-    <div class="photo"><img src="pic128.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 128"></div>
-    <div class="photo"><img src="pic129.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 129"></div>
-    <div class="photo"><img src="pic130.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 130"></div>
-    <div class="photo"><img src="pic131.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 131"></div>
-    <div class="photo"><img src="pic132.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 132"></div>
-    <div class="photo"><img src="pic133.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 133"></div>
-    <div class="photo"><img src="pic134.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 134"></div>
-    <div class="photo"><img src="pic135.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 135"></div>
-    <div class="photo"><img src="pic136.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 136"></div>
-    <div class="photo"><img src="pic137.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 137"></div>
-    <div class="photo"><img src="pic138.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 138"></div>
-    <div class="photo"><img src="pic139.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 139"></div>
-    <div class="photo"><img src="pic140.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 140"></div>
-    <div class="photo"><img src="pic141.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 141"></div>
-    <div class="photo"><img src="pic142.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 142"></div>
-    <div class="photo"><img src="pic143.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 143"></div>
-    <div class="photo"><img src="pic144.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 144"></div>
-    <div class="photo"><img src="pic145.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 145"></div>
-    <div class="photo"><img src="pic146.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 146"></div>
-    <div class="photo"><img src="pic147.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 147"></div>
-    <div class="photo"><img src="pic148.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 148"></div>
-    <div class="photo"><img src="pic149.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 149"></div>
-    <div class="photo"><img src="pic150.png" data-lightbox="gallery" onclick="openLightbox(this.src)"  alt="Pic 150"></div>
-    <div class="photo"><img src="pic151.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 151"></div>
-    <div class="photo"><img src="pic152.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 152"></div>
-    <div class="photo"><img src="pic153.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 153"></div>
-    <div class="photo"><img src="pic154.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 154"></div>
-    <div class="photo"><img src="pic155.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 155"></div>
-    <div class="photo"><img src="pic156.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 156"></div>
-    <div class="photo"><img src="pic157.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 157"></div>
-    <div class="photo"><img src="pic158.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 158"></div>
-    <div class="photo"><img src="pic159.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 159"></div>
-    <div class="photo"><img src="pic160.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 160"></div>
-    <div class="photo"><img src="pic161.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 161"></div>
-    <div class="photo"><img src="pic162.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 162"></div>
-    <div class="photo"><img src="pic163.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 163"></div>
-    <div class="photo"><img src="pic164.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 164"></div>
-    <div class="photo"><img src="pic165.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 165"></div>
-    <div class="photo"><img src="pic166.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 166"></div>
-    <div class="photo"><img src="pic167.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 167"></div>
-    <div class="photo"><img src="pic168.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 168"></div>
-    <div class="photo"><img src="pic169.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 169"></div>
-    <div class="photo"><img src="pic170.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 170"></div>
-    <div class="photo"><img src="pic171.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 171"></div>
-    <div class="photo"><img src="pic172.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 172"></div>
-    <div class="photo"><img src="pic173.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 173"></div>
-    <div class="photo"><img src="pic174.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 174"></div>
-    <div class="photo"><img src="pic175.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 175"></div>
-    <div class="photo"><img src="pic176.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 176"></div>
-    <div class="photo"><img src="pic177.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 177"></div>
-    <div class="photo"><img src="pic178.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 178"></div>
-    <div class="photo"><img src="pic179.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 179"></div>
-    <div class="photo"><img src="pic180.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 180"></div>
-    <div class="photo"><img src="pic181.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 181"></div>
-    <div class="photo"><img src="pic182.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 182"></div>
-    <div class="photo"><img src="pic183.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 183"></div>
-    <div class="photo"><img src="pic184.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 184"></div>
-    <div class="photo"><img src="pic185.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 185"></div>
-    <div class="photo"><img src="pic186.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 186"></div>
-    <div class="photo"><img src="pic187.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 187"></div>
-    <div class="photo"><img src="pic188.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 188"></div>
-    <div class="photo"><img src="pic189.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 189"></div>
-    <div class="photo"><img src="pic190.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 190"></div>
-    <div class="photo"><img src="pic191.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 191"></div>
-    <div class="photo"><img src="pic192.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 192"></div>
-    <div class="photo"><img src="pic193.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 193"></div>
-    <div class="photo"><img src="pic194.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 194"></div>
-    <div class="photo"><img src="pic195.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 195"></div>
-    <div class="photo"><img src="pic196.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 196"></div>
-    <div class="photo"><img src="pic197.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 197"></div>
-    <div class="photo"><img src="pic198.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 198"></div>
-    <div class="photo"><img src="pic199.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 199"></div>
-    <div class="photo"><img src="pic200.png" data-lightbox="gallery" onclick="openLightbox(this.src)" alt="Pic 200"></div>
-  </section>
-  <footer>
-    <p>© 2025 Grace Portrait Gallery</p>
-    <div class="social-icons">
-      <a href="#">Instagram</a>
-      <a href="#">Twitter</a>
-      <a href="#">Email</a>
-    </div>
-  </footer>
-
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Lightbox" />
+  <div id="lightbox" class="lightbox">
+    <span class="close-btn">&times;</span>
+    <span class="nav-btn nav-left">&#10094;</span>
+    <span class="nav-btn nav-right">&#10095;</span>
+    <img src="" alt="">
   </div>
 
   <script>
-    function toggleTheme() {
-      const body = document.body;
-      const theme = body.getAttribute("data-theme");
-      body.setAttribute("data-theme", theme === "dark" ? "light" : "dark");
+    const gallery = document.getElementById('gallery');
+
+    for (let i = 1; i <= 200; i++) {
+      const wrapper = document.createElement('div');
+      wrapper.className = 'photo-wrapper';
+      
+      const img = document.createElement('img');
+      img.src = `pic${i}.png`;
+      img.loading = 'lazy';
+      img.alt = '';
+      img.dataset.index = i;
+      img.style.animationDelay = `${i * 0.05}s`;
+      img.onclick = () => openLightbox(i);
+
+      const number = document.createElement('div');
+      number.className = 'photo-number';
+      number.textContent = i;
+
+      wrapper.appendChild(img);
+      wrapper.appendChild(number);
+      gallery.appendChild(wrapper);
     }
 
-    function openLightbox(src) {
-      const lightbox = document.getElementById("lightbox");
-      const img = document.getElementById("lightbox-img");
-      img.src = src;
-      lightbox.classList.add("active");
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = lightbox.querySelector('img');
+    const closeBtn = document.querySelector('.close-btn');
+    const navLeft = document.querySelector('.nav-left');
+    const navRight = document.querySelector('.nav-right');
+    let currentIndex = -1;
+
+    function openLightbox(index) {
+      currentIndex = index;
+      lightboxImg.src = `pic${currentIndex}.png`;
+      lightbox.classList.add('active');
     }
 
     function closeLightbox() {
-      document.getElementById("lightbox").classList.remove("active");
+      lightbox.classList.remove('active');
+      lightboxImg.src = '';
     }
-  const images = Array.from(document.querySelectorAll('.gallery img'));
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
 
-  let currentIndex = 0;
+    function showNext() {
+      currentIndex = currentIndex < totalImages ? currentIndex + 1 : 1;
+      lightboxImg.src = `pic${currentIndex}.png`;
+    }
 
-  images.forEach((img, index) => {
-    img.addEventListener('click', (e) => {
-      e.stopPropagation();
-      currentIndex = index;
-      openLightbox(img.src);
+    function showPrev() {
+      currentIndex = currentIndex > 1 ? currentIndex - 1 : totalImages;
+      lightboxImg.src = `pic${currentIndex}.png`;
+    }
+
+    closeBtn.addEventListener('click', closeLightbox);
+    navLeft.addEventListener('click', showPrev);
+    navRight.addEventListener('click', showNext);
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
     });
-  });
 
-  function openLightbox(src) {
-    lightbox.style.display = 'flex';
-    lightboxImg.src = src;
-  }
-
-  function closeLightbox() {
-    lightbox.style.display = 'none';
-  }
-
-  function showImage(index) {
-    if (index >= 0 && index < images.length) {
-      currentIndex = index;
-      lightboxImg.src = images[currentIndex].src;
-    }
-  }
-
-  // Keyboard navigation
-  document.addEventListener('keydown', (e) => {
-    if (lightbox.style.display === 'flex') {
-      if (e.key === 'ArrowRight') showImage(currentIndex + 1);
-      if (e.key === 'ArrowLeft') showImage(currentIndex - 1);
-      if (e.key === 'Escape') closeLightbox();
-    }
-  });
-
-  // Swipe support
-  let startX = 0;
-
-  lightbox.addEventListener('touchstart', (e) => {
-    startX = e.changedTouches[0].screenX;
-  });
-
-  lightbox.addEventListener('touchend', (e) => {
-    const endX = e.changedTouches[0].screenX;
-    const diff = startX - endX;
-
-    if (diff > 50) {
-      // Swiped left
-      showImage(currentIndex + 1);
-    } else if (diff < -50) {
-      // Swiped right
-      showImage(currentIndex - 1);
-    }
-  });
-
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      switch (e.key) {
+        case 'Escape': closeLightbox(); break;
+        case 'ArrowRight': showNext(); break;
+        case 'ArrowLeft': showPrev(); break;
+      }
+    });
   </script>
 </body>
 </html>
-
-
-
-
-<!--
-
-A young woman with a softly defined oval face, warm light-to-medium skin tone, and a delicate, 
-natural glow. She has symmetrical facial features with softly arched eyebrows, large almond-shaped hazel eyes framed by 
-long lashes, and a subtle winged eyeliner look. Her nose is narrow and straight, and her lips are full with a gentle 
-smile and defined cupid’s bow. She has long, dark brown hair styled in soft, natural waves, with a center part and 
-light layering that frames her face. Her hairstyle is smooth and slightly voluminous, giving a soft romantic vibe 
-Maintain her exact face and hairstyle as described: long dark brown hair in soft waves with a center part, oval face, 
-hazel almond eyes, full lips with a soft smile woman posing confidently in a luxurious red satin dress, off-shoulder design, 
-soft waves in her hair, a gentle smile, seductive yet classy look.
-
--->
